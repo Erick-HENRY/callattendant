@@ -149,9 +149,16 @@ class Whitelist(object):
         return True
 
     def check_number(self, number):
-        query = "SELECT Reason FROM Whitelist WHERE PhoneNo=:number"
+        number = str(number)
+        print(">> Check number in white ...")
+
+        query = 'SELECT Reason FROM Whitelist WHERE PhoneNo = substr(:number,1,length(PhoneNo))'
+
+        #query = 'SELECT Reason FROM Whitelist WHERE ((PhoneNo+"%") LIKE :number)'
+        #query =  'SELECT Reason FROM Whitelist WHERE ( :number LIKE (PhoneNo+"%") )'
         args = {"number": number}
         results = query_db(self.db, query, args, False)
+        print(">>> Number trouvé in white  ")
         if len(results) > 0:
             return True, results[0][0]
         else:

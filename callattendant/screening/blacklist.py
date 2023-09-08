@@ -152,9 +152,25 @@ class Blacklist(object):
             :parma number: the number to look for
             :returns: True if found; and a string containing the reason
         """
-        query = "SELECT Reason FROM Blacklist WHERE PhoneNo=:number"
+        #number = str(number)
+        print(">> Check number in black ...")
+
+
+        query = 'SELECT Reason FROM Blacklist WHERE PhoneNo = substr(:number,1,length(PhoneNo))'
+
+
+        #query = 'SELECT Reason FROM Blacklist WHERE ((PhoneNo+"%") LIKE :number)'
         args = {"number": number}
         results = query_db(self.db, query, args, False)
+        print(">>> Number trouvé  in black ")
+
+
+
+
+
+        #query = "SELECT Reason FROM Blacklist WHERE PhoneNo+"%" LIKE :number"
+        #args = {"number": number}
+        #results = query_db(self.db, query, args, False)
         if len(results) > 0:
             return True, results[0][0]
         else:
